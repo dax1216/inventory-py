@@ -1,0 +1,9 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<a href="{% url 'create_supplier' %}">Create Supplier</a>
+<h1>{{ title }}</h1>
+{% for supplier in suppliers %}
+<p><a href="{% url 'view_supplier' supplier.id %}">{{ supplier.name }}</a> <a href="{% url 'edit_supplier' supplier.id %}">Edit</a> <a href="{% url 'delete_supplier' supplier.id %}">Delete</a></p>
+{% endfor %}
+{% endblock content %}

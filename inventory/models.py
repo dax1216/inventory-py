@@ -21,7 +21,7 @@ class Brand(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
-    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
+    parent = models.ForeignKey('self', related_name='parent_cat', null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.name

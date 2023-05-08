@@ -1,0 +1,9 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<a href="{% url 'create_category' %}">Create Category</a>
+<h1>{{ title }}</h1>
+{% for category in categories %}
+<p><a href="{% url 'view_category' category.id %}">{{ category.name }}</a> <a href="{% url 'edit_category' category.id %}">Edit</a> <a href="{% url 'delete_category' category.id %}">Delete</a></p>
+{% endfor %}
+{% endblock content %}

@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from django.forms import inlineformset_factory
+from django.forms import inlineformset_factory, modelformset_factory
 from .models import Supplier, Brand, Category, Device, DeviceMeta
 
 
@@ -29,7 +29,5 @@ class DeviceMetaForm(ModelForm):
         model = DeviceMeta
         fields = '__all__'
 
-DeviceMetaFormSet = inlineformset_factory(
-    Device, DeviceMeta, form=DeviceForm,
-    extra=1, can_delete=True, can_delete_extra=True
-)
+
+DeviceMetaFormSet = modelformset_factory(DeviceMeta, fields=["meta_key", "meta_value"])

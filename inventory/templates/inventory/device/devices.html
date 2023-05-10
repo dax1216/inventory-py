@@ -1,7 +1,7 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<a href="#">Create Device</a>
+<a href="{% url 'create_device' %}">Create Device</a>
 <h1>{{ title }}</h1>
 {% for device in devices %}
 <p><a href="#">{{ device.name }}</a></p>

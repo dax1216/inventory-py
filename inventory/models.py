@@ -50,3 +50,6 @@ class DeviceMeta(models.Model):
     meta_key = models.CharField(null=False, blank=False, max_length=255)
     meta_value = models.CharField(null=False, blank=False, max_length=255)
 
+    def __str__(self):
+        return self.meta_key;
+

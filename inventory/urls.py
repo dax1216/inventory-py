@@ -19,5 +19,5 @@ urlpatterns = [
     path('categories/delete/<str:cid>', category.delete_category, name="delete_category"),
     path('devices/', device.device_list, name="device_list"),
     path('devices/create', device.create_device, name="create_device"),
-    path('devices/edit/<str:did>', device.edit_device, name="edit_device")
+    path('devices/edit/<str:did>', device.edit_device, name="edit_device"),
 ]

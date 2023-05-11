@@ -35,19 +35,35 @@ def edit_device(request, did=None):
     try:
         device = Device.objects.get(pk=did)
         form = DeviceForm(request.POST or None, instance=device)
-        formset = DeviceMetaFormSet(queryset=DeviceMeta.objects.filter(device=device))
-        print(formset)
-        
-        if request.method == 'POST':
-            if form.is_valid:
-                form.save()
-                messages.add_message(request, messages.SUCCESS, "Category updated.")
-                return redirect('edit_category', category.id)
-            else:
-                messages.add_message(request, messages.ERROR, "Error in saving entry.")
+        formset = DeviceMetaFormSet(request.POST or None, queryset=DeviceMeta.objects.filter(device=device))
 
-        context = {'form': form, 'formset': formset, 'title': title}
+        if request.method == 'POST':
+            if request.POST.get('form-TOTAL_FORMS') is None:
+                if form.is_valid:
+                    form.save()
+                    messages.add_message(request, messages.SUCCESS, "Device updated.")
+                    return redirect('edit_device', device.id)
+                else:
+                    messages.add_message(request, messages.ERROR, "Error in saving entry.")
+            else:
+                if formset.is_valid:
+                    instances = formset.save(commit=False)
+
+                    for instance in instances:
+                        instance.device = device
+                        instance.save()
+
+                    for deleted_item in formset.deleted_objects:
+                        deleted_item.delete()
+
+                    messages.add_message(request, messages.SUCCESS, "Device meta updated.")
+                    return redirect('edit_device', device.id)
+                else:
+                    messages.add_message(request, messages.ERROR, "Error in saving entry.")
+
+        context = {'form': form, 'formset': formset, 'device': device, 'title': title}
     except Device.DoesNotExist:
         raise Http404("Device does not exist")
     return render(request, "inventory/device/device_form.html", context)
+
 

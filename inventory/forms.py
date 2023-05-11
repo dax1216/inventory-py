@@ -30,4 +30,4 @@ class DeviceMetaForm(ModelForm):
         fields = '__all__'
 
 
-DeviceMetaFormSet = modelformset_factory(DeviceMeta, fields=["meta_key", "meta_value"])
+DeviceMetaFormSet = modelformset_factory(DeviceMeta, fields=["meta_key", "meta_value"], can_delete=True)

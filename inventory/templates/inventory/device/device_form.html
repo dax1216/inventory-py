@@ -1,6 +1,11 @@
 {% extends 'main.html' %}
 
 {% block content %}
+<style>
+    .hidden-form {
+        display: none;
+    }
+</style>
 <h1>{{ title }}</h1>
 {% include '../form_messages.html' %}
 <form action="" method="POST">
@@ -11,23 +16,34 @@
         {{ field }}
     </div>
     {% endfor %}
-    <p><button type="button" id="add-device-attr">Add Device Attribute</button></p>
-    <div class="device-attributes">
-
-    </div>
+    <p>
     <input type="submit" value="Save" />
 </form>
+
+<button type="button" id="add-device-attr">Add Device Attribute</button></p>
+<form action="" method="POST">
+    {{ formset.management_form }}
+    {% csrf_token %}
+    {% for form in formset %}
+        {{ form.as_p }}
+    {% endfor %}
+    <input type="submit" value="Save" id="devicemeta-btn" />
+</form>
+<div class="hidden-form">
+    {{ formset.empty_form.as_p }}
+</div>
 <script type="text/javascript">
     $(document).ready(function () {
         $('#add-device-attr').on('click', function () {
-            $('.device-attributes').append(`
-                <p class="attr-group">Name: <input type="text" name="attr_name[]" value="" />
-                 Value: <input type="text" name="attr_value[]" value="" /> <a href="#">remove</a></p>`);
+            let new_fields = $('.hidden-form').clone(true);
+            let total_rows = Number($('#id_form-TOTAL_FORMS').val())
+            const regex = new RegExp('__prefix__', 'g')
+            new_fields.html(new_fields.removeClass('hidden-form').html().replace(regex, total_rows));
+
+            $('#devicemeta-btn').before(new_fields);
+            $('#id_form-TOTAL_FORMS').val(total_rows + 1)
         });
 
-        $('body').on('click', '.attr-group a', function () {
-            $(this).parent().remove();
-        });
     });
 </script>
 {% endblock content %}

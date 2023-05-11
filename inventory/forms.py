@@ -1,6 +1,10 @@
-from django.forms import ModelForm
-from django.forms import inlineformset_factory, modelformset_factory
-from .models import Supplier, Brand, Category, Device, DeviceMeta
+from django.forms import ModelForm, modelformset_factory
+from django import forms
+from .utils import year_choices, current_year
+from .models import (
+    Supplier, Brand,
+    Category, Device,
+    DeviceMeta, Order, OrderItems)
 
 
 class SupplierForm(ModelForm):
@@ -8,10 +12,12 @@ class SupplierForm(ModelForm):
         model = Supplier
         fields = '__all__'
 
+
 class BrandForm(ModelForm):
     class Meta:
         model = Brand
         fields = '__all__'
+
 
 class CategoryForm(ModelForm):
     class Meta:
@@ -20,9 +26,12 @@ class CategoryForm(ModelForm):
 
 
 class DeviceForm(ModelForm):
+    year = forms.TypedChoiceField(coerce=int, choices=year_choices, initial=current_year)
+
     class Meta:
         model = Device
         fields = '__all__'
+
 
 class DeviceMetaForm(ModelForm):
     class Meta:
@@ -31,3 +40,20 @@ class DeviceMetaForm(ModelForm):
 
 
 DeviceMetaFormSet = modelformset_factory(DeviceMeta, fields=["meta_key", "meta_value"], can_delete=True)
+
+
+class OrderForm(ModelForm):
+    class Meta:
+        model = Order
+        fields = '__all__'
+
+
+class OrderItemsForm(ModelForm):
+    class Meta:
+        model = OrderItems
+        fields = '__all__'
+
+
+OrderItemsFormSet = modelformset_factory(OrderItems,
+                                         fields=["device", "serial_number", "product_number"],
+                                         can_delete=True)

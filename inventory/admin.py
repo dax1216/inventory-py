@@ -23,7 +23,6 @@ class OrderItemsInline(admin.StackedInline):
 class OrderNotesInline(admin.StackedInline):
     model = OrderNotes
     extra = 1
-    readonly_fields = ('created_by',)
 
 
 class OrderAdmin(admin.ModelAdmin):

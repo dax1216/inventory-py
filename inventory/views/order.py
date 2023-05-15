@@ -1,14 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import Http404
+from django.core.paginator import Paginator
 from inventory.forms import OrderForm, OrderItemsFormSet
 from inventory.models import Order, OrderItems, OrderNotes
 
 
 def order_list(request):
     orders = Order.objects.all()
+    paginator = Paginator(orders, 5)
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
     title = 'Orders'
-    context = {'orders': orders, 'title': title}
+    context = {'orders': orders, 'title': title, 'page_obj': page_obj}
 
     return render(request, 'inventory/order/orders.html', context)
 

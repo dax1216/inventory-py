@@ -23,7 +23,8 @@
     <input type="submit" value="Save" />
 </form>
 
-<button type="button" id="add-device-attr">Add Device Attribute</button></p>
+<button type="button" id="add-device-attr" {% if device is None %}disabled="disabled"{% endif %}>Add Device Attribute</button></p>
+{% if device != None %}
 <form action="" method="POST">
     {{ formset.management_form }}
     {% csrf_token %}
@@ -49,4 +50,5 @@
 
     });
 </script>
+{% endif %}
 {% endblock content %}

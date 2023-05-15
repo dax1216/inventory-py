@@ -92,11 +92,13 @@ class OrderItems(models.Model):
 
 class OrderNotes(models.Model):
     order = models.ForeignKey(Order, null=False, on_delete=models.CASCADE)
-    created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='created_by')
     notes = models.TextField(null=True, blank=True, default="")
     created = models.DateTimeField(auto_now_add=True)
 
+
     class Meta:
+        ordering = ['-id']
         verbose_name_plural = "Order Notes"
 
 

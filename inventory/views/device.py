@@ -1,13 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import Http404
+from django.core.paginator import Paginator
 from inventory.forms import DeviceForm, DeviceMetaFormSet
 from inventory.models import Device, DeviceMeta
 
+
 def device_list(request):
     devices = Device.objects.all()
+    paginator = Paginator(devices, 5)  # Show 25 contacts per page.
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
     title = 'Devices'
-    context = {'devices': devices, 'title': title}
+    context = {'devices': devices, 'title': title, 'page_obj': page_obj}
 
     return render(request, 'inventory/device/devices.html', context)
 

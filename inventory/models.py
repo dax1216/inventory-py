@@ -2,6 +2,8 @@ from django.db import models
 from django.conf import settings
 from .utils import  max_value_current_year
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db.models.signals import pre_save, post_save
+
 
 User = settings.AUTH_USER_MODEL
 
@@ -67,6 +69,14 @@ class Order(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
 
+    def __str__(self):
+        return f'{self.issued_to.username} Order -- {self.item_count} item(s)'
+
+    @property
+    def item_count(self):
+        return self.orderitems_set.all().count()
+
+
 class OrderItems(models.Model):
     order = models.ForeignKey(Order, null=False, on_delete=models.CASCADE)
     device = models.ForeignKey(Device, null=True, on_delete=models.SET_NULL)
@@ -88,6 +98,5 @@ class OrderNotes(models.Model):
 
     class Meta:
         verbose_name_plural = "Order Notes"
-
 
 

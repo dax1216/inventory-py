@@ -42,16 +42,26 @@ class DeviceMetaForm(ModelForm):
 DeviceMetaFormSet = modelformset_factory(DeviceMeta, fields=["meta_key", "meta_value"], can_delete=True)
 
 
+class DatePickerInput(forms.DateInput):
+    input_type = 'date'
+
+
 class OrderForm(ModelForm):
     class Meta:
         model = Order
-        fields = '__all__'
+        fields = ['issued_to', 'issued_on']
+
+        widgets = {
+            'issued_on': DatePickerInput(),
+        }
+
 
 
 class OrderItemsForm(ModelForm):
     class Meta:
         model = OrderItems
         fields = '__all__'
+
 
 
 OrderItemsFormSet = modelformset_factory(OrderItems,

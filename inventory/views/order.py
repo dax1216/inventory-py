@@ -14,12 +14,13 @@ def order_list(request):
 
 
 def create_order(request):
-    form = OrderForm()
+    form = OrderForm(request.POST or None)
 
     if request.method == 'POST':
-        form = OrderForm(request.POST)
-        if form.is_valid:
-            form.save()
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.issued_by = request.user
+            instance.save()
             messages.add_message(request, messages.SUCCESS, "Order saved.")
             return redirect('create_order')
         else:
@@ -30,20 +31,20 @@ def create_order(request):
     return render(request, 'inventory/order/order_form.html', context)
 
 
-def edit_order(request, did=None):
-    title = 'Edit Device'
+def edit_order(request, oid=None):
+    title = 'Edit Order'
     context = {}
     try:
-        device = Device.objects.get(pk=did)
-        form = DeviceForm(request.POST or None, instance=device)
-        formset = DeviceMetaFormSet(request.POST or None, queryset=DeviceMeta.objects.filter(device=device))
+        order = Order.objects.get(pk=oid)
+        form = OrderForm(request.POST or None, instance=order)
+        formset = OrderItemsFormSet(request.POST or None, queryset=OrderItems.objects.filter(order=order))
 
         if request.method == 'POST':
             if request.POST.get('form-TOTAL_FORMS') is None:
                 if form.is_valid:
                     form.save()
-                    messages.add_message(request, messages.SUCCESS, "Device updated.")
-                    return redirect('edit_device', device.id)
+                    messages.add_message(request, messages.SUCCESS, "Order updated.")
+                    return redirect('edit_order', order.id)
                 else:
                     messages.add_message(request, messages.ERROR, "Error in saving entry.")
             else:
@@ -51,20 +52,20 @@ def edit_order(request, did=None):
                     instances = formset.save(commit=False)
 
                     for instance in instances:
-                        instance.device = device
+                        instance.order = order
                         instance.save()
 
                     for deleted_item in formset.deleted_objects:
                         deleted_item.delete()
 
-                    messages.add_message(request, messages.SUCCESS, "Device meta updated.")
-                    return redirect('edit_device', device.id)
+                    messages.add_message(request, messages.SUCCESS, "Order Items updated.")
+                    return redirect('edit_order', order.id)
                 else:
                     messages.add_message(request, messages.ERROR, "Error in saving entry.")
 
-        context = {'form': form, 'formset': formset, 'device': device, 'title': title}
+        context = {'form': form, 'formset': formset, 'order': order, 'title': title}
     except Device.DoesNotExist:
-        raise Http404("Device does not exist")
-    return render(request, "inventory/device/device_form.html", context)
+        raise Http404("Order does not exist")
+    return render(request, "inventory/order/order_form.html", context)
 
 

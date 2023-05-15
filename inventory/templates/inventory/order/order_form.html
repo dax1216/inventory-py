@@ -1,0 +1,53 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<style>
+    .hidden-form {
+        display: none;
+    }
+</style>
+<h1>{{ title }}</h1>
+{% include '../form_messages.html' %}
+<form action="" method="POST">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="fieldWrapper">
+            {{ field.errors }}
+            {{ field.label_tag }} {{ field }}
+            {% if field.help_text %}
+            <p class="help">{{ field.help_text|safe }}</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+    <input type="submit" value="Save" />
+</form>
+
+<button type="button" id="add-order-items" {% if order is None %} disabled="disabled" {% endif %}>Add Items</button></p>
+{% if order != None %}
+<form action="" method="POST">
+    {{ formset.management_form }}
+    {% csrf_token %}
+    {% for form in formset %}
+        {{ form.as_p }}
+    {% endfor %}
+    <input type="submit" value="Save" id="orderitem-btn" />
+</form>
+<div class="hidden-form">
+    {{ formset.empty_form.as_p }}
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#add-order-items').on('click', function () {
+            let new_fields = $('.hidden-form').clone(true);
+            let total_rows = Number($('#id_form-TOTAL_FORMS').val())
+            const regex = new RegExp('__prefix__', 'g')
+            new_fields.html(new_fields.removeClass('hidden-form').html().replace(regex, total_rows));
+
+            $('#orderitem-btn').before(new_fields);
+            $('#id_form-TOTAL_FORMS').val(total_rows + 1)
+        });
+
+    });
+</script>
+{% endif %}
+{% endblock content %}

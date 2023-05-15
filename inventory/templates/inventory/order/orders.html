@@ -4,6 +4,6 @@
 <a href="{% url 'create_order' %}">Create Order</a>
 <h1>{{ title }}</h1>
 {% for order in orders %}
-<p><a href="#"></a></p>
+<p><a href="{% url 'edit_order' order.id %}">{{ order.issued_to.username }} order -- {{ order.item_count }} item(s)</a></p>
 {% endfor %}
 {% endblock content %}

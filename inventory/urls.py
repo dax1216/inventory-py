@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import supplier, brand, category, device, order
+from .views import supplier, brand, category, device, order, user
 
 urlpatterns = [
     path('suppliers/', supplier.supplier_list, name="supplier_list"),
@@ -23,4 +23,7 @@ urlpatterns = [
     path('orders/', order.order_list, name="order_list"),
     path('orders/create', order.create_order, name="create_order"),
     path('orders/edit/<str:oid>', order.edit_order, name="edit_order"),
+    path("register", user.register_request, name="register"),
+    path("login", user.login_request, name="login"),
+    path("logout", user.logout_request, name="logout"),
 ]

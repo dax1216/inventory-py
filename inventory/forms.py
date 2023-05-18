@@ -51,7 +51,7 @@ class DatePickerInput(forms.DateInput):
 class OrderForm(ModelForm):
     class Meta:
         model = Order
-        fields = ['issued_to', 'issued_on']
+        fields = ['issued_to', 'issued_on', 'status']
 
         widgets = {
             'issued_on': DatePickerInput(),

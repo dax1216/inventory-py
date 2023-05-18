@@ -62,11 +62,18 @@ class DeviceMeta(models.Model):
 
 
 class Order(models.Model):
+    class OrderStatus(models.TextChoices):
+        DRAFT = 'DRAFT', 'Draft'
+        DEPLOYED = 'DEPLOYED', 'Deployed'
+        RECEIVED = 'RECEIVED', 'Received'
+        RETURN = 'RETURNED', 'Returned'
+
     issued_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name="issued_to")
     issued_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="issued_by")
     issued_on = models.DateField(auto_now_add=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    status = models.CharField(max_length=50, choices=OrderStatus.choices, default=OrderStatus.DRAFT)
 
 
     def __str__(self):

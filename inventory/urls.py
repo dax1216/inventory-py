@@ -1,7 +1,9 @@
 from django.urls import path
-from .views import supplier, brand, category, device, order, user
+from django.contrib.auth import views as auth_views
+from .views import supplier, brand, category, device, order, user, home
 
 urlpatterns = [
+    path('', home.home, name="home"),
     path('suppliers/', supplier.supplier_list, name="supplier_list"),
     path('suppliers/create', supplier.create_supplier, name="create_supplier"),
     path('suppliers/<str:sid>', supplier.view_supplier, name="view_supplier"),
@@ -11,7 +13,7 @@ urlpatterns = [
     path('brands/create', brand.create_brand, name="create_brand"),
     path('brands/<str:sid>', brand.view_brand, name="view_brand"),
     path('brands/edit/<str:bid>', brand.edit_brand, name="edit_brand"),
-    path('brands/delete/<str:bid>', brand.delete_brand, name="delete_brand"),
+    path('brands/delete/<str:bid>', brand.delete_brand, name="sdelete_brand"),
     path('categories/', category.category_list, name="category_list"),
     path('categories/create', category.create_category, name="create_category"),
     path('categories/<str:cid>', category.view_category, name="view_category"),
@@ -26,4 +28,9 @@ urlpatterns = [
     path("register", user.register_request, name="register"),
     path("login", user.login_request, name="login"),
     path("logout", user.logout_request, name="logout"),
+    # path('accounts/', include('django.contrib.auth.urls')),
+    path("password_reset", user.password_reset_request, name="password_reset"),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='inventory/user/reset_password_done.html'), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name="inventory/user/reset_password_confirm.html"), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='inventory/user/reset_password_complete.html'), name='password_reset_complete'),
 ]

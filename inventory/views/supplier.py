@@ -3,8 +3,10 @@ from django.contrib import messages
 from django.http import Http404
 from inventory.forms import SupplierForm
 from inventory.models import Supplier
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def supplier_list(request):
     suppliers = Supplier.objects.all()
     title = 'Suppliers'
@@ -12,6 +14,7 @@ def supplier_list(request):
     return render(request, 'inventory/suppliers.html', context)
 
 
+@login_required
 def create_supplier(request):
     form = SupplierForm()
 
@@ -29,6 +32,7 @@ def create_supplier(request):
     return render(request, 'inventory/supplier_form.html', context)
 
 
+@login_required
 def edit_supplier(request, sid):
     title = 'Edit Supplier'
     context = {}
@@ -51,6 +55,7 @@ def edit_supplier(request, sid):
     return render(request, "inventory/supplier_form.html", context)
 
 
+@login_required
 def view_supplier(request, sid):
     title = ''
     context = {}
@@ -62,6 +67,7 @@ def view_supplier(request, sid):
     return render(request, "inventory/supplier.html", context)
 
 
+@login_required
 def delete_supplier(request, sid):
     title = 'Delete Supplier'
     context = {}

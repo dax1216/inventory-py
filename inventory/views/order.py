@@ -4,8 +4,10 @@ from django.http import Http404
 from django.core.paginator import Paginator
 from inventory.forms import OrderForm, OrderItemsFormSet
 from inventory.models import Order, OrderItems, OrderNotes
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def order_list(request):
     orders = Order.objects.all()
     paginator = Paginator(orders, 5)
@@ -18,6 +20,7 @@ def order_list(request):
     return render(request, 'inventory/order/orders.html', context)
 
 
+@login_required
 def create_order(request):
     form = OrderForm(request.POST or None)
 

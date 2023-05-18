@@ -4,8 +4,10 @@ from django.http import Http404
 from django.core.paginator import Paginator
 from inventory.forms import DeviceForm, DeviceMetaFormSet
 from inventory.models import Device, DeviceMeta
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def device_list(request):
     devices = Device.objects.all()
     paginator = Paginator(devices, 5)  # Show 25 contacts per page.
@@ -18,6 +20,7 @@ def device_list(request):
     return render(request, 'inventory/device/devices.html', context)
 
 
+@login_required
 def create_device(request):
     form = DeviceForm()
 
@@ -35,6 +38,7 @@ def create_device(request):
     return render(request, 'inventory/device/device_form.html', context)
 
 
+@login_required
 def edit_device(request, did=None):
     title = 'Edit Device'
     context = {}

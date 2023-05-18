@@ -1,17 +1,14 @@
 {% extends 'main.html' %}
-
+{% load crispy_forms_tags %}
 {% block content %}
-<h1>{{ title }}</h1>
+<h1 class="h1">{{ title }}</h1>
 {% include './form_messages.html' %}
-<form action="" method="POST">
-    {% csrf_token %}
-    {% for field in form %}
-    <div>
-        {{ field.label }}
-        {{ field }}
-    </div>
-    {% endfor %}
-    <input type="submit" value="Save" />
-</form>
+<div class="w-200">
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" class="btn btn-primary" value="Save" />
+    </form>
+</div>
 
 {% endblock content %}

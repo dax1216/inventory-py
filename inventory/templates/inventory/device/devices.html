@@ -1,12 +1,34 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<a href="{% url 'create_device' %}">Create Device</a>
-<h1>{{ title }}</h1>
-{% for device in page_obj %}
-<p><a href="{% url 'edit_device' device.id %}">{{ device.name }}</a></p>
-{% endfor %}
 
+<div class="d-flex border-bottom mb-4">
+    <h1 class="h2">{{ title }}</h1>
+</div>
+<a class="btn btn-outline-secondary" href="{% url 'create_device' %}">Create Device</a>
+<div class="table-responsive mt-4">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+
+            <th scope="col">Device</th>
+            <th scope="col">Brand</th>
+            <th scope="col">Category</th>
+            <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+    {% for device in page_obj %}
+        <tr>
+            <td>{{ device.name }}</td>
+            <td>{{ device.brand.name }}</td>
+            <td>{{ device.category.name }}</td>
+            <td><a class="btn btn-sm" href="{% url 'edit_device' device.id %}">Edit</a></td>
+        </tr>
+    {% endfor %}
+      </tbody>
+    </table>
+</div>
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
@@ -15,7 +37,7 @@
         {% endif %}
 
         <span class="current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
         </span>
 
         {% if page_obj.has_next %}

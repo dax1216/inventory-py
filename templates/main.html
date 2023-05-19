@@ -33,7 +33,7 @@
     <div class="container-fluid">
         <div class="row">
             {% include 'navmenu.html' %}
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <main class="col-md-9 ms-sm-auto col-lg-10 p-md-4">
 
             {% if messages %}
             <ul class="messages">
@@ -44,6 +44,7 @@
             {% endif %}
             {% block content %}
             {% endblock %}
+
             </main>
         </div>
     </div>

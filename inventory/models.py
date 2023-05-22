@@ -1,11 +1,9 @@
 from django.db import models
-from django.conf import settings
 from .utils import  max_value_current_year
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models.signals import pre_save, post_save
+from django.contrib.auth.models import User
 
-
-User = settings.AUTH_USER_MODEL
 
 # Create your models here.
 class Supplier(models.Model):
@@ -89,6 +87,7 @@ class OrderItems(models.Model):
     device = models.ForeignKey(Device, null=True, on_delete=models.SET_NULL)
     serial_number = models.CharField(max_length=200, default='', blank=True)
     product_number = models.CharField(max_length=200, default='', blank=True)
+    device_image = models.ImageField(null=True, upload_to='images/')
 
     def __str__(self):
         return f'{self.order.id} - {self.device.name}'
@@ -107,5 +106,21 @@ class OrderNotes(models.Model):
     class Meta:
         ordering = ['-id']
         verbose_name_plural = "Order Notes"
+
+
+class Profile(models.Model):
+    class Department(models.TextChoices):
+        PBB = 'PBB', 'PBB'
+        ADMIN_HR = 'ADMIN_HR', 'Admin/HR'
+        FINANCE = 'FINANCE', 'Finance'
+        ELP = 'ELP', 'ELP'
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    avatar = models.ImageField(default='default.jpg', upload_to='profile_images')
+    department = models.CharField(max_length=30, choices=Department.choices, default=Department.PBB)
+
+    def __str__(self):
+        return self.user.username
 
 

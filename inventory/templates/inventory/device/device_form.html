@@ -6,7 +6,9 @@
         display: none;
     }
 </style>
-<h1>{{ title }}</h1>
+<div class="d-flex border-bottom mb-4">
+    <h1 class="h2">{{ title }}</h1>
+</div>
 {% include '../form_messages.html' %}
 <form action="" method="POST">
     {% csrf_token %}

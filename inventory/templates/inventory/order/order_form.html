@@ -10,17 +10,17 @@
 {% include '../form_messages.html' %}
 <form action="" method="POST">
     {% csrf_token %}
-    {% form.as_p | crispy %}
+    {{ form|crispy }}
     <input type="submit" value="Save" />
 </form>
 
 <button type="button" id="add-order-items" {% if order is None %} disabled="disabled" {% endif %}>Add Items</button></p>
 {% if order != None %}
-<form action="" method="POST">
-    {{ formset.management_form }}
+<form action="" enctype="multipart/form-data" method="POST">
+    {{ formset.management_form|crispy }}
     {% csrf_token %}
     {% for form in formset %}
-        {{ form.as_p }}
+        {% crispy form %}
     {% endfor %}
     <input type="submit" value="Save" id="orderitem-btn" />
 </form>

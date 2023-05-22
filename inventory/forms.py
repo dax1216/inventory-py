@@ -67,7 +67,7 @@ class OrderItemsForm(ModelForm):
 
 
 OrderItemsFormSet = modelformset_factory(OrderItems,
-                                         fields=["device", "serial_number", "product_number"],
+                                         fields=["device", "serial_number", "product_number","device_image"],
                                          can_delete=True)
 
 class NewUserForm(UserCreationForm):

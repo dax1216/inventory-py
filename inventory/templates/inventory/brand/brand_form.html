@@ -1,17 +1,18 @@
 {% extends 'main.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-<h1>{{ title }}</h1>
+<div class="d-flex border-bottom mb-4">
+    <h1 class="h2">{{ title }}</h1>
+</div>
 {% include '../form_messages.html' %}
+<div class="w-50 col-md-12">
 <form action="" method="POST">
     {% csrf_token %}
     {% for field in form %}
-    <div>
-        {{ field.label }}
-        {{ field }}
-    </div>
+    {{ form|crispy }}
     {% endfor %}
-    <input type="submit" value="Save" />
+    <input type="submit" class="btn btn-primary" value="Save" />
+    <a href="{% url 'brand_list' %}" class="btn btn-secondary">Back to List</a>
 </form>
-
+</div>
 {% endblock content %}

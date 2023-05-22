@@ -1,5 +1,5 @@
 {% extends 'main.html' %}
-
+{% load crispy_forms_tags %}
 {% block content %}
 <style>
     .hidden-form {
@@ -10,33 +10,31 @@
     <h1 class="h2">{{ title }}</h1>
 </div>
 {% include '../form_messages.html' %}
+<div class="w-50 mb-5">
 <form action="" method="POST">
     {% csrf_token %}
-    {% for field in form %}
-    <div class="fieldWrapper">
-        {{ field.errors }}
-        {{ field.label_tag }} {{ field }}
-        {% if field.help_text %}
-        <p class="help">{{ field.help_text|safe }}</p>
-        {% endif %}
-    </div>
-    {% endfor %}
-
-    <input type="submit" value="Save" />
+    {{ form|crispy }}
+    <input type="submit" class="btn btn-primary" value="Save" />
 </form>
-
-<button type="button" id="add-device-attr" {% if device is None %}disabled="disabled"{% endif %}>Add Device Attribute</button></p>
+</div>
 {% if device != None %}
+<div class="d-flex border-bottom my-4">
+    <h3 class="h3">Device Attributes</h3>
+</div>
+<button type="button" class="btn btn-outline-secondary" id="add-device-attr" {% if device is None %}disabled="disabled"{% endif %}>Add Device Attribute</button></p>
+
+<div class="w-50">
 <form action="" method="POST">
-    {{ formset.management_form }}
+    {{ formset.management_form|crispy }}
     {% csrf_token %}
     {% for form in formset %}
-        {{ form.as_p }}
+        {{ form|crispy }}
     {% endfor %}
-    <input type="submit" value="Save" id="devicemeta-btn" />
+    <input type="submit" class="btn btn-primary" value="Save" id="devicemeta-btn" />
 </form>
 <div class="hidden-form">
-    {{ formset.empty_form.as_p }}
+    {{ formset.empty_form|crispy }}
+</div>
 </div>
 <script type="text/javascript">
     $(document).ready(function () {

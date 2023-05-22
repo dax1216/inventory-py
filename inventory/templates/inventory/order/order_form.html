@@ -6,26 +6,35 @@
         display: none;
     }
 </style>
-<h1>{{ title }}</h1>
+<div class="d-flex border-bottom mb-4">
+    <h1 class="h2">{{ title }}</h1>
+</div>
+<a href="{% url 'order_list' %}" class="btn btn-outline-secondary">Back to List</a>
 {% include '../form_messages.html' %}
+<div class="w-50 my-3">
 <form action="" method="POST">
     {% csrf_token %}
     {{ form|crispy }}
-    <input type="submit" value="Save" />
+    <input type="submit" class="btn btn-primary" value="Save" />
 </form>
-
-<button type="button" id="add-order-items" {% if order is None %} disabled="disabled" {% endif %}>Add Items</button></p>
+</div>
 {% if order != None %}
-<form action="" enctype="multipart/form-data" method="POST">
-    {{ formset.management_form|crispy }}
-    {% csrf_token %}
-    {% for form in formset %}
-        {% crispy form %}
-    {% endfor %}
-    <input type="submit" value="Save" id="orderitem-btn" />
-</form>
-<div class="hidden-form">
-    {{ formset.empty_form.as_p }}
+<div class="d-flex border-bottom mb-4">
+    <h3 class="h3">Order Items</h3>
+</div>
+<button type="button" id="add-order-items" class="btn btn-outline-secondary" {% if order is None %} disabled="disabled" {% endif %}>Add Items</button></p>
+<div class="w-50">
+    <form action="" enctype="multipart/form-data" method="POST">
+        {{ formset.management_form|crispy }}
+        {% csrf_token %}
+        {% for form in formset %}
+            {% crispy form %}
+        {% endfor %}
+        <input type="submit" value="Save" id="orderitem-btn" class="btn btn-primary" />
+    </form>
+    <div class="hidden-form">
+        {{ formset.empty_form|crispy }}
+    </div>
 </div>
 <script type="text/javascript">
     $(document).ready(function () {

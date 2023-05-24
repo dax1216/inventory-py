@@ -1,8 +1,46 @@
 {% extends 'main.html' %}
-
+{% load crispy_forms_tags %}
 {% block content %}
 <div class="d-flex border-bottom mb-4">
     <h1 class="h2">{{ title }}</h1>
 </div>
-
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">Details</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="change-password-tab" data-bs-toggle="tab" data-bs-target="#change-password" type="button" role="tab" aria-controls="change-password" aria-selected="false">Change Password</button>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile">
+    <div class="w-50 mt-5">
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ user_form|crispy }}
+        {{ profile_form|crispy }}
+        <button type="submit" class="btn btn-primary">Save</button>
+      </form>
+    </div>
+  </div>
+  <div class="tab-pane fade" id="change-password" role="tabpanel" aria-labelledby="change-password">
+    <div class="w-50 mt-5">
+      <form method="POST">
+          {% csrf_token %}
+          {{ password_form|crispy }}
+          <input type="hidden" name="password_change" value="1" />
+          <button type="submit" class="btn btn-primary">Change Password</button>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+window.onload = (event) => {
+  if(window.location.hash != '' ) {
+     var someVarName = document.querySelector(window.location.hash + '-tab'); // theTabID of the tab you want to open
+     var tab = new bootstrap.Tab(someVarName);
+     tab.show();
+  }
+}
+</script>
 {% endblock content %}

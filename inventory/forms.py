@@ -1,12 +1,21 @@
 from django.forms import ModelForm, modelformset_factory
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, SetPasswordForm
 from django.contrib.auth.models import User
 from .utils import year_choices, current_year
 from .models import (
     Supplier, Brand,
     Category, Device,
-    DeviceMeta, Order, OrderItems)
+    DeviceMeta, Order,
+    OrderItems, Profile)
+
+
+DEPARTMENTS = (
+        ('PBB', 'PBB'),
+        ('ADMIN_HR', 'Admin/HR'),
+        ('FINANCE', 'Finance'),
+        ('ELP', 'ELP')
+    )
 
 
 class SupplierForm(ModelForm):
@@ -83,3 +92,32 @@ class NewUserForm(UserCreationForm):
 		if commit:
 			user.save()
 		return user
+
+
+class UpdateUserForm(forms.ModelForm):
+    # username = forms.CharField(max_length=100,
+    #                            required=True,
+    #                            widget=forms.TextInput(attrs={'class': 'form-control'}))
+    # email = forms.EmailField(required=True,
+    #                          widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name']
+
+
+class UpdateProfileForm(forms.ModelForm):
+
+    # avatar = forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control-file'}))
+    # bio = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}))
+    department = forms.ChoiceField(choices=DEPARTMENTS)
+    class Meta:
+        model = Profile
+        fields = ['avatar', 'department']
+
+
+class SetPasswordForm(SetPasswordForm):
+    class Meta:
+        model = User
+        fields = ['new_password1', 'new_password2']
+

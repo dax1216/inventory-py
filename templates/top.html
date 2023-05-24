@@ -6,7 +6,7 @@
 
   <div class="navbar-nav">
     <div class="nav-item text-nowrap">
-      <a href="#" class="nav-link px-3">Welcome {{ request.user.username }}</a>
+      <a href="{% url 'profile' %}" class="nav-link px-3">Welcome {{ request.user.username }}</a>
       <a class="nav-link px-3" href="{% url 'logout' %}">Sign out</a>
     </div>
   </div>

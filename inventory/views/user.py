@@ -1,10 +1,9 @@
 from django.shortcuts import  render, redirect
-from inventory.forms import NewUserForm
+from inventory.forms import NewUserForm, UpdateUserForm, UpdateProfileForm, SetPasswordForm
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
-from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 from django.db.models.query_utils import Q
@@ -12,6 +11,8 @@ from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 
 
 def login_request(request):
@@ -89,9 +90,33 @@ def password_reset_request(request):
 	return render(request=request, template_name="inventory/user/reset_password.html", context={"password_reset_form":password_reset_form})
 
 
+@login_required
 def profile(request):
-	# user = request.user
-	context = {}
+
+	if request.method == 'POST':
+		user_form = UpdateUserForm(request.POST, instance=request.user)
+		profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
+
+		if user_form.is_valid() and profile_form.is_valid():
+			user_form.save()
+			profile_form.save()
+			messages.success(request, 'Your profile is updated successfully')
+
+			return redirect(reverse('profile'))
+	else:
+		user_form = UpdateUserForm(instance=request.user)
+		profile_form = UpdateProfileForm(instance=request.user.profile)
+		password_form = SetPasswordForm(request.user)
+
+	context = {
+		'title': 'My Profile',
+        'user_form': user_form,
+		'profile_form': profile_form,
+		'password_form': password_form
+	}
 
 	return render(request, 'inventory/user/profile.html', context)
+
+
+
 

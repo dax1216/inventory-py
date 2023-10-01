@@ -13,6 +13,7 @@
               Orders
             </a>
           </li>
+          {% if request.user.is_staff %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'device_list' %}">
               <span data-feather="shopping-cart" class="align-text-bottom"></span>
@@ -37,6 +38,7 @@
               Categories
             </a>
           </li>
+          {% endif %}
         </ul>
 
 

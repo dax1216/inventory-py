@@ -88,7 +88,7 @@ class OrderItems(models.Model):
     device = models.ForeignKey(Device, null=True, on_delete=models.SET_NULL)
     serial_number = models.CharField(max_length=200, default='', blank=True)
     product_number = models.CharField(max_length=200, default='', blank=True)
-    device_image = models.ImageField(null=True, upload_to='images/')
+    device_image = models.ImageField(null=True, blank=True, upload_to='images/')
 
     def __str__(self):
         return f'{self.order.id} - {self.device.name}'

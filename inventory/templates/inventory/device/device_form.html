@@ -24,17 +24,17 @@
 <button type="button" class="btn btn-outline-secondary" id="add-device-attr" {% if device is None %}disabled="disabled"{% endif %}>Add Device Attribute</button></p>
 
 <div class="w-50">
-<form action="" method="POST">
-    {{ formset.management_form|crispy }}
-    {% csrf_token %}
-    {% for form in formset %}
-        {{ form|crispy }}
-    {% endfor %}
-    <input type="submit" class="btn btn-primary" value="Save" id="devicemeta-btn" />
-</form>
-<div class="hidden-form">
-    {{ formset.empty_form|crispy }}
-</div>
+    <form action="" method="POST">
+        {{ formset.management_form|crispy }}
+        {% csrf_token %}
+        {% for form in formset %}
+            {{ form|crispy }}
+        {% endfor %}
+        <input type="submit" class="btn btn-primary" value="Save" id="devicemeta-btn" />
+    </form>
+    <div class="hidden-form">
+        {{ formset.empty_form|crispy }}
+    </div>
 </div>
 <script type="text/javascript">
     $(document).ready(function () {

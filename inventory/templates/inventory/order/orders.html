@@ -12,6 +12,8 @@
       <thead>
         <tr>
             <th scope="col">Order</th>
+            <th scope="col">Issued By</th>
+            <th scope="col">Issued To</th>
             <th scope="col">Status</th>
             <th scope="col"></th>
         </tr>
@@ -20,6 +22,8 @@
     {% for order in page_obj %}
             <tr>
                 <td>{{ order.issued_to.username }} order -- {{ order.item_count }} item(s)</td>
+                <td>{{ order.issued_by.user.username }}</td>
+                <td>{{ order.issued_to.user.username }}</td>
                 <td>{{ order.status }}</td>
                 <td><a href="{% url 'edit_order' order.id %}">Edit</td>
             </tr>

@@ -24,11 +24,11 @@
 </div>
 <button type="button" id="add-order-items" class="btn btn-outline-secondary" {% if order is None %} disabled="disabled" {% endif %}>Add Items</button></p>
 <div class="w-50">
-    <form action="" enctype="multipart/form-data" method="POST">
+    <form enctype="multipart/form-data" method="POST">
         {{ formset.management_form|crispy }}
         {% csrf_token %}
         {% for form in formset %}
-            {% crispy form %}
+            {{ form|crispy }}
         {% endfor %}
         <input type="submit" value="Save" id="orderitem-btn" class="btn btn-primary" />
     </form>

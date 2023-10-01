@@ -94,15 +94,29 @@ def password_reset_request(request):
 def profile(request):
 
 	if request.method == 'POST':
-		user_form = UpdateUserForm(request.POST, instance=request.user)
-		profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
+		if request.POST.get('password_change') is not None:
+			password_form = SetPasswordForm(request.user, request.POST)
 
-		if user_form.is_valid() and profile_form.is_valid():
-			user_form.save()
-			profile_form.save()
-			messages.success(request, 'Your profile is updated successfully')
+			if password_form.is_valid():
+				password_form.save()
+				messages.success(request, "Your password has been changed")
 
-			return redirect(reverse('profile'))
+				return redirect('/login')
+			else:
+				for error in list(password_form.errors.values()):
+					messages.error(request, error)
+				return redirect('/profile#change-password')
+		else:
+			user_form = UpdateUserForm(request.POST, instance=request.user)
+			profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
+			password_form = SetPasswordForm(request.user)
+
+			if user_form.is_valid() and profile_form.is_valid():
+				user_form.save()
+				profile_form.save()
+				messages.success(request, 'Your profile is updated successfully')
+
+				return redirect(reverse('profile'))
 	else:
 		user_form = UpdateUserForm(instance=request.user)
 		profile_form = UpdateProfileForm(instance=request.user.profile)

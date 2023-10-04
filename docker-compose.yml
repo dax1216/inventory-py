@@ -3,14 +3,15 @@ version: '3.8'
 services:
 
   django:
-    container_name: django-inventory
+    container_name: inventory-py-django
     build:
       context: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn itdept.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - .:/usr/src/app
     ports:
       - 8000:8000
+    image: inventory-py-django
     environment:
-      DEBUG=1
-      ALLOWED_HOSTS=localhost,127.0.0.1
+      - DEBUG=1
+
